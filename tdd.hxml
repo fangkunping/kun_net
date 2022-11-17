@@ -1,0 +1,36 @@
+-cp src
+-cp test
+-cp R:\SkyDrive\R\16\NewJ2013\NEW_WORLD\20xx\new_era\fp\src
+-cp R:\SkyDrive\R\16\NewJ2013\NEW_WORLD\20xx\new_era\haxe_core\src
+# --interp
+
+--each
+
+-cs dist/cs
+-D net-ver=40
+-D analyzer-optimize
+-D no-root
+-D erase-generics
+-main tdd.Main
+
+--next
+
+-D unity
+-D no-compilation
+-cs F:\\unity\\Guaji\\Assets\\src
+-D net-ver=40
+-D analyzer-optimize
+-D no-root
+-D erase-generics
+-main tdd.Main
+
+--next
+
+-js dist/html/js/tdd.js
+
+--next
+
+--jvm dist/first.jar
+--java-lib ../netty4.1.75/netty-all-4.1.75.Final.jar
+
+-main tdd.Main

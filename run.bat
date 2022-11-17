@@ -1,0 +1,1 @@
+.\dist\cs\bin\Main.exe

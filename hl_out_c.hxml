@@ -1,0 +1,20 @@
+-cp src
+-cp test
+-cp socket_impl_base
+-cp socket_server_hl
+-cp socket_client_hl
+-cp R:\SkyDrive\R\16\NewJ2013\NEW_WORLD\20xx\new_era\fp\src
+-cp R:\SkyDrive\R\16\NewJ2013\NEW_WORLD\20xx\new_era\haxe_core\src
+
+--library haxe-concurrent
+--library hxWebSockets
+
+--each
+
+--hl out\server\main.c
+-main tdd.Server
+
+--next
+
+--hl out\client\main.c
+-main tdd.Client

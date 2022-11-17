@@ -1,0 +1,2 @@
+haxelib run hlc-compiler --srcDir out\client --outFile bin\client\main --hlLibDir C:\HaxeToolkit_4.2.x\hl-1.11.0-win\ --copyRuntimeFiles --exFile c:\Windows\System32\dbghelp.dll --saveCmd out\client\run_gcc.bat -w
+haxelib run hlc-compiler --srcDir out\server --outFile bin\server\main --hlLibDir C:\HaxeToolkit_4.2.x\hl-1.11.0-win\ --copyRuntimeFiles --exFile c:\Windows\System32\dbghelp.dll --saveCmd out\server\run_gcc.bat -w
