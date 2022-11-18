@@ -1,12 +1,16 @@
 package kun_net.core;
 
+import kun_net.protocol.I_SocketHandle;
 import hx.ws.Log;
 import haxe.io.BytesInput;
 import haxe.io.BytesBuffer;
 import haxe.io.Bytes;
 import hl.uv.Stream;
+import haxe.io.Bytes as ON_DATA_T;
+import haxe.io.Bytes as MSG_IN_T;
+import haxe.io.Bytes as SEND_T;
 
-class SocketHandleImpl {
+class SocketHandleImpl implements I_SocketHandle<ON_DATA_T, MSG_IN_T, SEND_T> {
 	public var uuid:Int = -1;
 	public var nickName:String = null;
 
@@ -25,15 +29,16 @@ class SocketHandleImpl {
 		closeCallback = _callbackFn;
 	}
 
-	public function onData(_callbackFn:Bytes->Void = null) {
+	public function onData(_callbackFn:ON_DATA_T->Void = null) {
 		msgInCallback = _callbackFn;
 	}
 
-	function onOpen(_callbackFn:Void->Void):Void{}
-	function onError(_callbackFn:Dynamic->Void):Void{}
+	function onOpen(_callbackFn:Void->Void):Void {}
+
+	function onError(_callbackFn:Dynamic->Void):Void {}
 
 	// 发送消息
-	public function send(msg:Bytes) {
+	public function send(msg:SEND_T) {
 		var msgLen = msg.length;
 		var headData = Bytes.alloc(CommonConst.HEAD_LEN);
 		Log.debug('Message Len: ${msgLen}');
@@ -48,7 +53,7 @@ class SocketHandleImpl {
 	}
 
 	// 信息到达
-	public function msgIn(packageData:Bytes) {
+	public function msgIn(packageData:MSG_IN_T) {
 		if (packageData == null) {
 			Log.debug("Socket Disconnect!");
 			if (closeCallback != null) {
@@ -60,8 +65,6 @@ class SocketHandleImpl {
 		packageDataCache.add(packageData);
 		decodePackage();
 	}
-
-
 
 	// 解包
 	function decodePackage() {

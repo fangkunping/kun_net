@@ -1,12 +1,13 @@
 package kun_net.core;
 
-import hx.ws.Types.MessageType;
-import haxe.io.BytesInput;
-import haxe.io.BytesBuffer;
-import haxe.io.Bytes;
+import kun_net.protocol.I_SocketHandle;
 import hl.uv.Stream;
 
-class SocketHandleImpl {
+import hx.ws.Types.MessageType as ON_DATA_T;
+import haxe.io.Bytes as MSG_IN_T;
+import Any as SEND_T;
+
+class SocketHandleImpl implements I_SocketHandle<ON_DATA_T, MSG_IN_T, SEND_T> {
 	public var uuid:Int = -1;
 	public var nickName:String = null;
 
@@ -22,7 +23,7 @@ class SocketHandleImpl {
 		wsHandler.onclose = _callbackFn;
 	}
 
-	public function onData(_callbackFn:MessageType->Void = null) {
+	public function onData(_callbackFn:ON_DATA_T->Void = null) {
 		wsHandler.onmessage = _callbackFn;
 	}
 
@@ -35,17 +36,17 @@ class SocketHandleImpl {
 	}
 
 	// 发送消息
-	public function send(msg:Any) {
+	public function send(msg:SEND_T) {
 		wsHandler.send(msg);
 	}
 
 	// 主动关闭连接
-	public function close() {
+	public function close(?callb:Null<() -> Void>) {
 		wsHandler.close();
 	}
 
 	// 信息到达
-	public function msgIn(packageData:Bytes) {
+	public function msgIn(packageData:MSG_IN_T) {
 		wsHandler.handle(packageData);
 	}
 }
