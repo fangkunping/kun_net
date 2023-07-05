@@ -1,14 +1,14 @@
 package tdd;
 
+import sys.thread.Mutex;
+import sys.thread.FixedThreadPool;
 import hx.ws.Log;
-import hx.concurrent.lock.RLock;
-import hx.concurrent.executor.Executor;
 import kun_net.client.SocketClient;
 import haxe.io.Bytes;
 
 class Client {
 	static public function main() {
-		final lock = new RLock();
+		final lock = new Mutex();
 		Log.mask = Log.INFO | Log.DEBUG | Log.DATA;
 		var client:SocketClient = null;
 		client = new SocketClient((socketHandle) -> {
@@ -18,15 +18,14 @@ class Client {
 			socketHandle.onData(msg -> {
 				trace(msg.toString());
 			});
-			var executor = Executor.create(10);
+			var executor = new FixedThreadPool(10000);
 
 			for (i in 0...10) {
-				executor.submit(() -> {
+				executor.run(() -> {
 					var msg = Bytes.ofString('Hello World ${i}');
-					lock.execute(() -> {
-						socketHandle.send(msg);
-						return true;
-					});
+					lock.acquire();
+					socketHandle.send(msg);
+					lock.release();
 				});
 			}
 		});

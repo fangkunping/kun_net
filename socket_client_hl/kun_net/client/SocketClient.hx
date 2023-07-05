@@ -1,5 +1,6 @@
 package kun_net.client;
 
+import sys.net.Host;
 import hx.ws.Log;
 import haxe.io.Bytes;
 import kun_net.core.SocketHandleImpl;
@@ -13,7 +14,7 @@ class SocketClient {
 	public function new(_connectCallback:SocketHandleImpl->Void = null) {
 		connectCallback = _connectCallback;
 		client = new Tcp();
-		client.connect(Config.host, Config.port, onConnected);
+		client.connect(new Host("0.0.0.0"), 4836, onConnected);
 	}
 
 	function onConnected(success:Bool) {

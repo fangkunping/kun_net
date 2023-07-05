@@ -1,5 +1,7 @@
 package kun_net.core;
 
+import haxe.io.BytesOutput;
+import kun_net.server.SocketManager;
 import haxe.io.Bytes;
 import hx.strings.Strings;
 
@@ -13,6 +15,18 @@ class HttpUtils {
 		socketHandleImpl.send(msgBytes);
 		socketHandleImpl.close();
 	}
+
+	static public function echo2(msg:String = "", header:Map<String, String> = null, code:Int = 200) {
+		var res = encodeHeader(header, code);
+		var msgBytes = Bytes.ofString(msg);
+		res.add('${HeaderConst.CONTENT_LENGTH}: ${msgBytes.length}\r\n');
+		res.add('\r\n');
+		var r = new BytesOutput();
+		r.write(Bytes.ofString(res.toString()));
+		r.write(msgBytes);
+		return r.getBytes();
+	}
+
 
 	static function encodeHeader(header:Map<String, String> = null, code:Int = 200) {
 		var res = new StringBuf();
@@ -38,7 +52,7 @@ class HttpUtils {
 		if (queryString != null) {
 			for (s in queryString.split("&")) {
 				var kvt:Array<String> = s.split("=");
-				if (kvt.length > 0) {
+				if (kvt.length == 2) {
 					querys.set(kvt[0], StringTools.urlDecode(kvt[1]));
 				}
 			}

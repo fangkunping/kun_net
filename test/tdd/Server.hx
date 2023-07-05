@@ -9,7 +9,8 @@ class Server {
 	static public function main() {
 		Log.mask = Log.INFO | Log.DEBUG | Log.DATA;
 		// Assert.eq("test", "error");
-		new SocketServer(socketHandle -> {
+		trace("Server Start");
+		new SocketServer(new sys.net.Host("0.0.0.0"), 4836, 10000, socketHandle -> {
 			socketHandle.onClose(() -> {
 				trace('ID: ${socketHandle.uuid} , Close!');
 			});
@@ -17,6 +18,5 @@ class Server {
 				trace('ID: ${socketHandle.uuid}, MSG: ${msg.toString()}');
 			});
 		});
-		trace("Server Start");
 	}
 }

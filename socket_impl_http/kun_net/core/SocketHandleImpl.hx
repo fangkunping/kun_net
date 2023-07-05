@@ -1,5 +1,6 @@
 package kun_net.core;
 
+import sys.thread.Mutex;
 import kun_net.protocol.I_SocketHandle;
 import hx.ws.Log;
 import haxe.io.BytesInput;
@@ -14,6 +15,7 @@ class SocketHandleImpl implements I_SocketHandle<ON_DATA_T, MSG_IN_T, SEND_T> {
 	public var uuid:Int = -1;
 	public var nickName:String = null;
 
+	var mutexLook:Mutex = null;
 	var stream:hl.uv.Stream;
 	var packageDataCache:BytesBuffer;
 
@@ -38,6 +40,19 @@ class SocketHandleImpl implements I_SocketHandle<ON_DATA_T, MSG_IN_T, SEND_T> {
 	public function new(_stream:Stream) {
 		stream = _stream;
 		packageDataCache = new BytesBuffer();
+	}
+
+	public function asynLock() {
+		if (mutexLook == null) {
+			mutexLook = new Mutex();
+		}
+		mutexLook.acquire();
+	}
+
+	public function asynRelease() {
+		if (mutexLook == null)
+			return;
+		mutexLook.release();
 	}
 
 	public function onClose(_callbackFn:Void->Void = null) {

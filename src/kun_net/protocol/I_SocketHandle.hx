@@ -8,4 +8,5 @@ interface I_SocketHandle<ON_DATA_T, MSG_IN_T, SEND_T> {
 	private function send(msg:SEND_T):Void;
 	private function close(?callb:Null<() -> Void>):Void;
 	private function msgIn(packageData:MSG_IN_T):Void;
+	// private function getLock():RLock;
 }
